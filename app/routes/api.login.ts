@@ -17,8 +17,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return await cors(
     request,
-    json({
-      token: `_ANTDMIN_${faker.string.uuid()}`,
-    })
+    json(
+      {
+        token: `_ANTDMIN_${faker.string.uuid()}`,
+      },
+      200
+    )
   )
 }
