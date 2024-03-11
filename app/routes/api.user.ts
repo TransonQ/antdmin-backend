@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { LoaderFunctionArgs, json } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const token = request.headers.get('Athorization')
+  const token = request.headers.get('Authorization')
 
   if (!token?.includes('_ANTDMIN_')) {
     return json(
@@ -15,6 +15,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json({
     id: faker.string.uuid(),
-    name: faker.finance.accountName(),
+    name: faker.internet.userName(),
   })
 }

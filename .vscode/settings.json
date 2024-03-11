@@ -1,0 +1,11 @@
+{
+  "prettier.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "i18n-ally.localesPaths": [
+    "apps/account-center/src/locales"
+  ],
+  "i18n-ally.keystyle": "flat",
+}
