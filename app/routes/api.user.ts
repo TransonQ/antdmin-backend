@@ -8,8 +8,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return json({ code: '401', message: 'Unauthorized' }, 401)
   }
 
-  return json({
-    id: faker.string.uuid(),
-    name: faker.finance.accountName(),
-  })
+  return json(
+    {
+      id: faker.string.uuid(),
+      name: faker.finance.accountName(),
+    },
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    }
+  )
 }
