@@ -1,11 +1,18 @@
 import { faker } from '@faker-js/faker'
 import { LoaderFunctionArgs, json } from '@remix-run/node'
+import { cors } from '../config/index'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const token = request.headers.get('Athorization')
 
   if (!token?.includes('_ANTDMIN_')) {
-    return json({ code: '401', message: 'Unauthorized' }, 401)
+    return json(
+      { code: '401', message: 'Unauthorized' },
+      {
+        ...cors,
+        status: 401,
+      }
+    )
   }
 
   return json(
@@ -14,9 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       name: faker.finance.accountName(),
     },
     {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
+      ...cors,
     }
   )
 }
