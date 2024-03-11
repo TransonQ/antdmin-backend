@@ -1,5 +1,7 @@
-import { json } from '@remix-run/node'
+import { faker } from '@faker-js/faker'
+import { ActionFunctionArgs, json } from '@remix-run/node'
+import { cors } from 'remix-utils/cors'
 
-export const action = async () => {
-  return json({}, 200)
+export const action = async ({ request }: ActionFunctionArgs) => {
+  return await cors(request, json({ id: faker.string.uuid() }, 200))
 }
