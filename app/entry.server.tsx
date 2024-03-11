@@ -11,6 +11,7 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import { cors } from 'remix-utils/cors'
 
 const ABORT_DELAY = 5_000;
 
@@ -97,6 +98,8 @@ function handleBrowserRequest(
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
+    let didError = false;
+
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
         context={remixContext}
@@ -111,12 +114,21 @@ function handleBrowserRequest(
 
           responseHeaders.set("Content-Type", "text/html");
 
-          resolve(
-            new Response(stream, {
-              headers: responseHeaders,
-              status: responseStatusCode,
-            })
-          );
+          // resolve(
+          //   new Response(stream, {
+          //     headers: responseHeaders,
+          //     status: responseStatusCode,
+          //   })
+          // );
+          cors(
+						request,
+						new Response(stream, {
+							headers: responseHeaders,
+							status: didError ? 500 : responseStatusCode,
+						}),
+					).then((response) => {
+						resolve(response);
+					});
 
           pipe(body);
         },
@@ -124,6 +136,8 @@ function handleBrowserRequest(
           reject(error);
         },
         onError(error: unknown) {
+          didError = true;
+
           responseStatusCode = 500;
           // Log streaming rendering errors from inside the shell.  Don't log
           // errors encountered during initial shell rendering since they'll
